@@ -11,7 +11,8 @@ import {
   congratulationsWinner, 
   openField, 
   hadExplosion,
-  showMines } from './src/Logic'
+  showMines,
+  invertFlag } from './src/Logic'
 
 export default class App extends Component{
   
@@ -53,6 +54,19 @@ export default class App extends Component{
 
     this.setState({ board, lost, won })
   }
+
+  onSelectField = (row, column) => {
+    const board = cloneBoard(this.state.board)
+    invertFlag(board, row, column)
+    const won = congratulationsWinner(board)
+
+    if(won){
+      Alert.alert('Parabéns! se você é a Evellin me deve um beijo',' se não, vaza.')
+    }
+
+    this.setState({ board, won })
+
+  }
   
   render(){
     return(
@@ -61,7 +75,10 @@ export default class App extends Component{
         <Text style={styles.Description}>Tamanho da grade:
           {params.getRowsAmount()}X{params.getColumnsAmount()}</Text>
           <View style={styles.board}>
-            <MineField board={this.state.board} onOpenField={this.onOpenField}/>
+            <MineField 
+              board={this.state.board} 
+              onOpenField={this.onOpenField}
+              onSelectField={this.onSelectField}/>
           </View> 
       </View>
     );

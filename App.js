@@ -6,6 +6,7 @@ import params from './src/params'
 import Field from './src/components/Field'
 import MineField from './src/components/MineField'
 import Header from './src/components/Header'
+import LevelSelection from './src/screens/LevelSelection'
 import { 
   createMinedBoard,
   cloneBoard, 
@@ -36,6 +37,7 @@ export default class App extends Component{
       board: createMinedBoard(rows, cols, this.minesAmount()),
       winner: false,
       lost: false,
+      // showLevelSelection: false,
     }
   }
 
@@ -47,7 +49,7 @@ export default class App extends Component{
 
     if (lost) {
       showMines(board)
-      Alert.alert('Esse é um jogo do amor', 'da sinceridade e da sorte...')
+      Alert.alert('Esse é um jogo do amor, da sinceridade e da sorte...')
     }
 
     if(won){
@@ -59,7 +61,11 @@ export default class App extends Component{
 
   onSelectField = (row, column) => {
     const board = cloneBoard(this.state.board)
-    invertFlag(board, row, column)
+      if((this.minesAmount() - flagsUsed(board)) != 0){
+        invertFlag(board, row, column)
+      }else if(board[row][column].flagged){
+        invertFlag(board, row, column)
+      }
     const won = congratulationsWinner(board)
 
     if(won){
@@ -67,14 +73,22 @@ export default class App extends Component{
     }
 
     this.setState({ board, won })
+  }
 
+  onLevelSelected = level => {
+    params.difficultLevel = level
+    this.setState(this.createState())
   }
   
   render(){
     return(
       <View style={styles.container}>
+        <LevelSelection isVisible={this.state.showLevelSelection}
+          onLevelSelected={this.onLevelSelected}
+          onCancel={() => this.setState({showLevelSelection: false})}/>
           <Header flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
-            onNewGame={() => this.setState(this.createState())}/>
+            onNewGame={() => this.setState(this.createState())}
+            onFlagPress={() => this.setState({ showLevelSelection: true})}/>
           <View style={styles.board}>
             <MineField 
               board={this.state.board} 

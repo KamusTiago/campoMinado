@@ -49,7 +49,7 @@ export default class App extends Component{
     }
 
     if(won){
-      Alert.alert('Parabéns! se você é a Evellin me deve um beijo',' se não, vaza.')
+      Alert.alert('Parabéns! ',' você venceu!.')
     }
 
     this.setState({ board, lost, won })
@@ -61,7 +61,7 @@ export default class App extends Component{
     const won = congratulationsWinner(board)
 
     if(won){
-      Alert.alert('Parabéns! se você é a Evellin me deve um beijo',' se não, vaza.')
+      Alert.alert('Parabéns! ',' você venceu!.')
     }
 
     this.setState({ board, won })

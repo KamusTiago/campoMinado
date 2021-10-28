@@ -5,6 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import params from './src/params'
 import Field from './src/components/Field'
 import MineField from './src/components/MineField'
+import Header from './src/components/Header'
 import { 
   createMinedBoard,
   cloneBoard, 
@@ -12,7 +13,8 @@ import {
   openField, 
   hadExplosion,
   showMines,
-  invertFlag } from './src/Logic'
+  invertFlag,
+  flagsUsed } from './src/Logic'
 
 export default class App extends Component{
   
@@ -71,9 +73,8 @@ export default class App extends Component{
   render(){
     return(
       <View style={styles.container}>
-        <Text style={styles.welcome}>Campo Minado do Amor e da Sinceridade</Text>
-        <Text style={styles.Description}>Tamanho da grade:
-          {params.getRowsAmount()}X{params.getColumnsAmount()}</Text>
+          <Header flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
+            onNewGame={() => this.setState(this.createState())}/>
           <View style={styles.board}>
             <MineField 
               board={this.state.board} 
